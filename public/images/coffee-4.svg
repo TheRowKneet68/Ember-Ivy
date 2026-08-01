@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="coffee-4">
+  <defs>
+    <filter id="b" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="38"/></filter>
+    
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e1e1e"/><stop offset="1" stop-color="#111111"/></linearGradient>
+    <radialGradient id="vig" cx="50%" cy="46%" r="75%"><stop offset="0%" stop-color="transparent"/><stop offset="78%" stop-color="transparent"/><stop offset="100%" stop-color="rgba(0,0,0,0.55)"/></radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  <ellipse cx="300" cy="470" rx="150" ry="70" fill="#241f18" filter="url(#b)"/><path d="M 210 400 h 180 l 26 60 a 110 60 0 0 1 -232 0 z" fill="#f5efe6"/><path d="M 210 400 h 180 l 26 60 a 110 60 0 0 1 -232 0 z" fill="none" stroke="#a8794a" stroke-width="6"/><ellipse cx="300" cy="398" rx="90" ry="30" fill="#4a2f1d"/><ellipse cx="300" cy="398" rx="66" ry="20" fill="url(#bg)" opacity="0.5"/><path d="M 392 410 h 60 a 22 22 0 0 1 0 44 h -36" fill="none" stroke="#e9e0d2" stroke-width="14" stroke-linecap="round"/><path d="M 291 400 c -6 -120 16 -180 54 -230" stroke="#d9cfc0" stroke-width="5" fill="none" opacity="0.85" stroke-linecap="round"/><path d="M 316 400 c 9 -100 20 -150 -18 -190" stroke="#d9cfc0" stroke-width="4" fill="none" opacity="0.6" stroke-linecap="round"/><ellipse cx="560" cy="510" rx="156" ry="70" fill="#241f18" filter="url(#b)"/><path d="M 470 440 h 180 l 26 60 a 110 60 0 0 1 -232 0 z" fill="#f5efe6"/><path d="M 470 440 h 180 l 26 60 a 110 60 0 0 1 -232 0 z" fill="none" stroke="#8a5f31" stroke-width="6"/><ellipse cx="560" cy="438" rx="90" ry="30" fill="#2d6a4f"/><ellipse cx="560" cy="438" rx="66" ry="20" fill="url(#bg)" opacity="0.5"/><path d="M 652 450 h 60 a 22 22 0 0 1 0 44 h -36" fill="none" stroke="#e9e0d2" stroke-width="14" stroke-linecap="round"/><path d="M 551 440 c -14 -120 -22 -180 -57 -230" stroke="#d9cfc0" stroke-width="5" fill="none" opacity="0.85" stroke-linecap="round"/><path d="M 576 440 c 3 -100 14 -150 -5 -190" stroke="#d9cfc0" stroke-width="4" fill="none" opacity="0.6" stroke-linecap="round"/>
+  <rect width="100%" height="100%" fill="url(#vig)" filter="url(#g)"/>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111111"/>
+      <stop offset="1" stop-color="#1e1e1e"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e7c48a"/>
+      <stop offset="1" stop-color="#a8794a"/>
+    </linearGradient>
+    <filter id="b"><feGaussianBlur stdDeviation="60"/></filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="250" cy="180" r="220" fill="rgba(196,154,108,0.16)" filter="url(#b)"/>
+  <circle cx="980" cy="520" r="260" fill="rgba(45,106,79,0.14)" filter="url(#b)"/>
+  <circle cx="120" cy="560" r="140" fill="rgba(231,196,138,0.10)" filter="url(#b)"/>
+  <text x="60" y="150" font-family="Georgia, serif" font-style="italic" font-size="30" fill="url(#gold)">E&amp;I · Lakeside, Pokhara</text>
+  <text x="60" y="340" font-family="Georgia, serif" font-size="72" fill="#faf8f6">Where Great Coffee Meets</text>
+  <text x="60" y="420" font-family="Georgia, serif" font-size="72" fill="url(#gold)">Great Evenings.</text>
+  <text x="60" y="500" font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#cfc8be">Specialty Coffee · Restaurant · Cocktail Lounge · Live Music</text>
+  <rect x="60" y="540" width="190" height="4" rx="2" fill="url(#gold)"/>
+</svg>

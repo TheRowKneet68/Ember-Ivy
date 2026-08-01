@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="team-3">
+  <defs>
+    <filter id="b" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="22"/></filter>
+    
+    <radialGradient id="vig" cx="50%" cy="46%" r="75%"><stop offset="0%" stop-color="transparent"/><stop offset="78%" stop-color="transparent"/><stop offset="100%" stop-color="rgba(0,0,0,0.55)"/></radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  <circle cx="50%" cy="30%" r="260" fill="rgba(231,196,138,0.14)" filter="url(#b)"/><path d="M 400 800 C 200 800 170 640 190 560 Q 210 490 290 470 L 400 470 L 510 470 Q 590 490 610 560 C 630 640 600 800 400 800 Z" fill="#3a2f26"/><rect x="352" y="410" width="96" height="70" rx="26" fill="#a5714b"/><circle cx="400" cy="330" r="132" fill="#a5714b"/><path d="M 400 170 A 140 150 0 0 1 545 300 Q 552 240 480 205 Q 470 150 400 165 Q 320 150 320 205 Q 248 240 255 300 A 140 150 0 0 1 400 170 Z" fill="#241a12"/><ellipse cx="345" cy="330" rx="10" ry="16" fill="#1a110b" opacity="0.85"/><ellipse cx="455" cy="330" rx="10" ry="16" fill="#1a110b" opacity="0.85"/><path d="M 372 392 q 28 24 56 0" stroke="#1a110b" stroke-width="7" fill="none" stroke-linecap="round" opacity="0.8"/><circle cx="345" cy="330" r="4" fill="#fff" opacity="0.9"/><circle cx="455" cy="330" r="4" fill="#fff" opacity="0.9"/><circle cx="400" cy="330" r="132" fill="none" stroke="rgba(231,196,138,0.35)" stroke-width="3" stroke-dasharray="6 10"/>
+  <rect width="100%" height="100%" fill="url(#vig)" filter="url(#g)"/>
+</svg>

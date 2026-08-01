@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ember & Ivy — Café, Restaurant, Cocktail Lounge & Live Music | Lakeside, Pokhara</title>
+
+    <meta name="description" content="Ember & Ivy is a premium café, restaurant, cocktail lounge and live music venue in Lakeside, Pokhara. Handcrafted specialty coffee by day, signature cuisine, cocktails and live music by night. Open daily 7 AM – 1 AM." />
+    <meta name="keywords" content="Ember and Ivy, café Pokhara, restaurant Lakeside, cocktail lounge Pokhara, live music Pokhara, specialty coffee Nepal, fine dining Pokhara, private events Pokhara" />
+    <meta name="author" content="Ember & Ivy" />
+    <meta name="theme-color" content="#111111" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="restaurant" />
+    <meta property="og:site_name" content="Ember & Ivy" />
+    <meta property="og:title" content="Ember & Ivy — Where Great Coffee Meets Great Evenings" />
+    <meta property="og:description" content="Handcrafted coffee, signature cuisine, live music and unforgettable nights in Lakeside, Pokhara. Open daily 7 AM – 1 AM." />
+    <meta property="og:url" content="https://emberandivy.com.np/" />
+    <meta property="og:image" content="https://emberandivy.com.np/images/og-cover.svg" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ember & Ivy — Where Great Coffee Meets Great Evenings" />
+    <meta name="twitter:description" content="Premium café, restaurant, cocktail lounge & live music venue in Lakeside, Pokhara. Open daily 7 AM – 1 AM." />
+    <meta name="twitter:image" content="https://emberandivy.com.np/images/og-cover.svg" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href="https://emberandivy.com.np/" />
+
+    <!-- Fonts: Cormorant Garamond + Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Set theme before paint -->
+    <script>
+      ;(function () {
+        try {
+          var t = localStorage.getItem('ei-theme')
+          if (t === 'light') document.documentElement.classList.add('light')
+        } catch (e) {}
+      })()
+    </script>
+
+    <!-- Restaurant structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "Ember & Ivy",
+      "image": "https://emberandivy.com.np/images/og-cover.svg",
+      "servesCuisine": ["Specialty Coffee", "Continental", "Asian", "Fusion"],
+      "priceRange": "$$$",
+      "telephone": "+977-980-000-0000",
+      "email": "hello@emberandivy.com",
+      "acceptsReservations": "True",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Lakeside Road",
+        "addressLocality": "Pokhara",
+        "addressRegion": "Gandaki",
+        "postalCode": "33700",
+        "addressCountry": "NP"
+      },
+      "geo": { "@type": "GeoCoordinates", "latitude": 28.2096, "longitude": 83.9856 },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "opens": "07:00",
+        "closes": "01:00"
+      },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.7", "reviewCount": "19" },
+      "sameAs": [
+        "https://www.facebook.com/emberandivy",
+        "https://www.instagram.com/emberandivy"
+      ]
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
