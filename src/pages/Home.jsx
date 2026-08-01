@@ -134,11 +134,6 @@ function Hero({ slide, setSlide }) {
           />
         ))}
       </div>
-
-      <div className="hero-scroll">
-        <div className="mouse" />
-        Scroll
-      </div>
     </section>
   )
 }
