@@ -637,6 +637,7 @@ html.light .badge--seasonal {
   align-items: center;
   overflow: hidden;
   isolation: isolate;
+  padding-top: var(--nav-h);
 }
 
 .hero-slides {
@@ -691,7 +692,7 @@ html.light .badge--seasonal {
 
 .hero-content {
   max-width: 860px;
-  padding: 0 24px;
+  padding: 24px 24px 0;
   margin-inline: auto;
   text-align: center;
 }
