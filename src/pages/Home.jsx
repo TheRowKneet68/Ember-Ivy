@@ -40,6 +40,7 @@ export default function Home() {
 
   const popular = menu.filter((m) => m.popular).slice(0, 8)
   const chefSpecials = menu.filter((m) => m.chef).slice(0, 4)
+  const featuredEvent = events.find((event) => event.featured) || events[0] || null
 
   const show = (k) => (sections === null ? true : sections[k] !== false)
 
