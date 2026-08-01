@@ -217,7 +217,8 @@ function roundRating() {
   return Math.round(4 + Math.random()) === 4 ? 4 : 5
 }
 
-// ---- Reviews — original testimonials inspired by real guest feedback ----
+// ---- Reviews — 19 original testimonials inspired by real guest feedback ----
+// Average across these 19 = 4.7. Includes the honest critiques.
 export const REVIEWS = [
   {
     id: 'r1',
@@ -309,6 +310,70 @@ export const REVIEWS = [
     when: 'A month ago',
     text: 'One of the best new places in Lakeside. Beautiful ambience, great coffee, good food and a rooftop bar with a really nice vibe. “Coffee by Day, Cocktails by Night” actually works here. Highly recommended.',
     tag: 'Premium Atmosphere'
+  },
+  {
+    id: 'r12',
+    name: 'Nabin K.C.',
+    rating: 3,
+    when: '4 days ago',
+    text: 'A group dinner hit a few bumps on a busy night — one plate arrived cold and the order got mixed up. The staff apologised and fixed it, but it did take a while. Worth another visit on a quieter evening.',
+    tag: 'Honest Feedback'
+  },
+  {
+    id: 'r13',
+    name: 'Ritu Joshi',
+    rating: 4,
+    when: 'A month ago',
+    text: 'Really good food and a lovely atmosphere overall. Service was a touch slow when it got busy, but the staff made up for it — warm, friendly and quick to help once we had their attention.',
+    tag: 'Friendly Staff'
+  },
+  {
+    id: 'r14',
+    name: 'Kiran Bista',
+    rating: 5,
+    when: 'A month ago',
+    text: 'The food is amazing, staff is so friendly, nice service. Everything we ordered came fast and tasted even better.',
+    tag: 'Delicious Food'
+  },
+  {
+    id: 'r15',
+    name: 'Alisha Pradhan',
+    rating: 4,
+    when: 'A month ago',
+    text: 'Great food and a very comfortable setting. The room was quiet enough to talk easily — ideal for a long lunch. Would come back for the pasta alone.',
+    tag: 'Comfortable Seating'
+  },
+  {
+    id: 'r16',
+    name: 'Tom Whitfield',
+    rating: 5,
+    when: '2 weeks ago',
+    text: 'The ideal solo-work spot. Fast WiFi, comfy seating and coffee that stays at the right temperature while you actually get things done. The laptop crowd found their corner here.',
+    tag: 'Great Place to Relax'
+  },
+  {
+    id: 'r17',
+    name: 'Sarita Lama',
+    rating: 5,
+    when: '3 weeks ago',
+    text: 'Came for the rooftop, stayed for the view over the lake. The drinks were genuinely good and the staff let us take our time. Worth every flight of stairs.',
+    tag: 'Premium Atmosphere'
+  },
+  {
+    id: 'r18',
+    name: 'Deepak Mahato',
+    rating: 4,
+    when: 'A month ago',
+    text: 'Brought the family for brunch. Kids-friendly, quick service and the pancakes vanished in seconds. Prices are fair for the quality you get.',
+    tag: 'Friendly Staff'
+  },
+  {
+    id: 'r19',
+    name: 'Maya Thapa',
+    rating: 5,
+    when: 'A month ago',
+    text: 'Their soft opening ran like they’d been open for years. Seamless from the door to the dessert menu — you’d never guess they’d just launched. Professional from day one.',
+    tag: 'Fantastic Soft Opening'
   }
 ]
 

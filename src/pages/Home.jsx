@@ -556,7 +556,7 @@ function Reviews() {
           </div>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
-          {REVIEWS.slice(0, 6).map((r, i) => (
+          {REVIEWS.slice(0, 9).map((r, i) => (
             <Reveal key={r.id} delay={i * 0.07}>
               <article className="review-card">
                 <Stars rating={r.rating} />
