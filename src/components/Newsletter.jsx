@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { sendEmail } from '../lib/emailjs.js'
+import { escapeHtml } from '../lib/escape.js'
 
 export default function Newsletter() {
   const [email, setEmail] = useState('')
@@ -12,7 +13,7 @@ export default function Newsletter() {
     const res = await sendEmail({
       to_name: 'Ember & Ivy Team',
       subject: 'New newsletter subscriber',
-      message_html: `<p>A new subscriber has joined the Ember &amp; Ivy list:</p><p><strong>${email}</strong></p>`
+      message_html: `<p>A new subscriber has joined the Ember &amp; Ivy list:</p><p><strong>${escapeHtml(email)}</strong></p>`
     })
     setState(res.ok || res.demo ? 'done' : 'error')
   }

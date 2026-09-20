@@ -17,16 +17,24 @@ export default function ReservationsPage() {
   }
 
   async function setStatus(row, status) {
-    await store.update('reservations', row.id, { status })
-    toast.success(`Marked ${status}.`)
-    await reload()
+    try {
+      await store.update('reservations', row.id, { status })
+      toast.success(`Marked ${status}.`)
+      await reload()
+    } catch (err) {
+      toast.error(err.message || 'Could not update the status.')
+    }
   }
 
   async function remove(row) {
     if (!window.confirm(`Delete reservation for ${row.name}?`)) return
-    await store.remove('reservations', row.id)
-    toast.success('Deleted.')
-    await reload()
+    try {
+      await store.remove('reservations', row.id)
+      toast.success('Deleted.')
+      await reload()
+    } catch (err) {
+      toast.error(err.message || 'Could not delete the reservation.')
+    }
   }
 
   const sorted = rows ? [...rows].sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0)) : []

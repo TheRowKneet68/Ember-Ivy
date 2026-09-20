@@ -168,7 +168,7 @@ grant insert, update, delete on public.categories, public.menu_items,
   public.reviews, public.events, public.gallery, public.settings,
   public.hero_slides, public.team, public.instagram, public.analytics,
   public.reservations, public.profiles to authenticated;
-grant select, insert, update on public.analytics to anon, authenticated;
+grant select on public.analytics to anon, authenticated;
 grant select, insert on public.reservations to anon, authenticated;
 
 -- ---------- Role helper ----------
@@ -410,3 +410,41 @@ insert into public.settings (key, value) values
   ('theme', '"dark"'::jsonb),
   ('rating', '4.7'::jsonb)
 on conflict (key) do nothing;
+
+-- ============================================================
+-- Hardening (appended; idempotent — safe to re-run)
+-- ============================================================
+
+-- Visit counter: increments server-side only. Public users can no longer
+-- write arbitrary values into `analytics` (the old anon upsert policies
+-- are revoked below, and the app calls this function instead).
+create or replace function public.track_visit() returns void
+language sql security definer set search_path = public as $$
+  insert into public.analytics (key, value) values ('visits', 1)
+  on conflict (key) do update set value = public.analytics.value + 1, updated_at = now();
+$$;
+revoke all on function public.track_visit() from public, anon;
+grant execute on function public.track_visit() to anon, authenticated;
+
+drop policy if exists public_track_insert_analytics on public.analytics;
+drop policy if exists public_track_update_analytics on public.analytics;
+
+-- Reservation sanity constraints (public bookings still start 'pending').
+alter table public.reservations drop constraint if exists reservations_status_check;
+alter table public.reservations add constraint reservations_status_check
+  check (status in ('pending', 'confirmed', 'cancelled'));
+alter table public.reservations drop constraint if exists reservations_guests_check;
+alter table public.reservations add constraint reservations_guests_check
+  check (guests >= 1 and guests <= 100);
+alter table public.reservations drop constraint if exists reservations_name_len;
+alter table public.reservations add constraint reservations_name_len
+  check (char_length(name) <= 120);
+alter table public.reservations drop constraint if exists reservations_phone_len;
+alter table public.reservations add constraint reservations_phone_len
+  check (char_length(coalesce(phone, '')) <= 40);
+alter table public.reservations drop constraint if exists reservations_email_len;
+alter table public.reservations add constraint reservations_email_len
+  check (char_length(coalesce(email, '')) <= 320);
+alter table public.reservations drop constraint if exists reservations_message_len;
+alter table public.reservations add constraint reservations_message_len
+  check (char_length(coalesce(message, '')) <= 2000);

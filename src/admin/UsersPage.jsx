@@ -73,7 +73,7 @@ export default function UsersPage() {
               </div>
               <div className="field">
                 <label className="label">Temporary Password</label>
-                <input className="input" type="text" required placeholder="Something they can remember" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+                <input className="input" type="password" autoComplete="new-password" required placeholder="Something they can remember" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
               </div>
               <div className="field">
                 <label className="label">What can they do?</label>

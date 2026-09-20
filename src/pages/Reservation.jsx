@@ -4,6 +4,7 @@ import Icon from '../components/Icons.jsx'
 import Reveal from '../components/Reveal.jsx'
 import { store } from '../lib/store.js'
 import { sendEmail } from '../lib/emailjs.js'
+import { escapeHtml } from '../lib/escape.js'
 import { SITE } from '../data/seed.js'
 
 const OCCASIONS = ['Just dinner', 'Date night', 'Birthday', 'Anniversary', 'Private event', 'Corporate dinner', 'Celebration']
@@ -35,8 +36,8 @@ export default function Reservation() {
       await sendEmail({
         to_name: form.name,
         subject: `Reservation received — ${form.date} at ${form.time}`,
-        message_html: `<p>Dear <strong>${form.name}</strong>,</p><p>Thank you for reserving at Ember &amp; Ivy.</p>
-          <p><strong>Guests:</strong> ${form.guests}<br/><strong>When:</strong> ${form.date} at ${form.time}<br/><strong>Occasion:</strong> ${form.occasion}</p>
+        message_html: `<p>Dear <strong>${escapeHtml(form.name)}</strong>,</p><p>Thank you for reserving at Ember &amp; Ivy.</p>
+          <p><strong>Guests:</strong> ${escapeHtml(form.guests)}<br/><strong>When:</strong> ${escapeHtml(form.date)} at ${escapeHtml(form.time)}<br/><strong>Occasion:</strong> ${escapeHtml(form.occasion)}</p>
           <p>We'll confirm by phone or email shortly. See you in Lakeside!</p>`
       })
       setDone({ ...form, id: reservation.id })

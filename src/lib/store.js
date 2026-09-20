@@ -161,9 +161,12 @@ export async function saveSetting(key, value) {
 
 export async function trackVisit() {
   if (supabaseConfigured) {
-    const { data } = await supabase.from('analytics').select('*').eq('key', 'visits').maybeSingle()
+    const { error } = await supabase.rpc('track_visit')
+    if (!error) return
+    const { data } = await supabase.from('analytics').select('value').eq('key', 'visits').maybeSingle()
     const next = (data?.value || 0) + 1
-    await supabase.from('analytics').upsert({ key: 'visits', value: next }, { onConflict: 'key' })
+    const { error: e2 } = await supabase.from('analytics').upsert({ key: 'visits', value: next }, { onConflict: 'key' })
+    if (e2) throw new Error(e2.message)
     return
   }
   const data = hydrate()

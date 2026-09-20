@@ -1,8 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Icon from './Icons.jsx'
 
 export default function Lightbox({ items, index, onClose, onNavigate }) {
   const item = items[index]
+  const closeRef = useRef(null)
+
+  useEffect(() => {
+    closeRef.current?.focus()
+  }, [])
 
   useEffect(() => {
     const onKey = (e) => {
@@ -19,8 +24,8 @@ export default function Lightbox({ items, index, onClose, onNavigate }) {
   }, [index, items.length, onClose, onNavigate])
 
   return (
-    <div className="lightbox" onClick={onClose}>
-      <button className="lb-close" onClick={onClose} aria-label="Close">
+    <div className="lightbox" onClick={onClose} role="dialog" aria-modal="true" aria-label="Photo viewer">
+      <button className="lb-close" ref={closeRef} onClick={onClose} aria-label="Close">
         <Icon name="close" size={22} />
       </button>
       <button

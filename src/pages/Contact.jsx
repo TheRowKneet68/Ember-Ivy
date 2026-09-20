@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Icon from '../components/Icons.jsx'
 import Reveal from '../components/Reveal.jsx'
 import { sendEmail } from '../lib/emailjs.js'
+import { escapeHtml } from '../lib/escape.js'
 import { SITE, OPENING_HOURS } from '../data/seed.js'
 
 export default function Contact() {
@@ -19,7 +20,7 @@ export default function Contact() {
     const res = await sendEmail({
       to_name: 'Ember & Ivy Team',
       subject: `Message from ${form.name}: ${form.subject || 'General'}`,
-      message_html: `<p><strong>From:</strong> ${form.name} (${form.email})</p><p><strong>Subject:</strong> ${form.subject || 'General'}</p><p>${form.message}</p>`
+      message_html: `<p><strong>From:</strong> ${escapeHtml(form.name)} (${escapeHtml(form.email)})</p><p><strong>Subject:</strong> ${escapeHtml(form.subject || 'General')}</p><p>${escapeHtml(form.message)}</p>`
     })
     if (res.ok || res.demo) setState('done')
     else {
