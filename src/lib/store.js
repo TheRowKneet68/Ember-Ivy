@@ -79,14 +79,9 @@ async function supabaseList(table) {
 export const store = {
   async list(key) {
     if (supabaseConfigured && TABLES[key]) {
-      try {
-        const rows = await supabaseList(TABLES[key])
-        if (rows.length > 0) return rows
-      } catch (err) {
-        console.warn(`[store] supabase ${key} fell back to seed:`, err.message)
-      }
+      return supabaseList(TABLES[key])
     }
-    const data = supabaseConfigured ? { reservations: [] } : hydrate()
+    const data = hydrate()
     return data[key] || seedFor(key)
   },
 
@@ -102,9 +97,9 @@ export const store = {
   async insert(key, row) {
     const clean = { ...row }
     if (supabaseConfigured && TABLES[key]) {
-      const { data, error } = await supabase.from(TABLES[key]).insert(clean).select().single()
+      const { error } = await supabase.from(TABLES[key]).insert(clean)
       if (error) throw new Error(error.message)
-      return data
+      return clean
     }
     const data = hydrate()
     data[key].push({ id: `id-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, ...clean })
@@ -134,11 +129,6 @@ export const store = {
     data[key] = data[key].filter((r) => String(r.id) !== String(id))
     writeLS(data)
     return true
-  },
-
-  async count(key) {
-    const rows = await this.list(key)
-    return rows.length
   }
 }
 
@@ -189,14 +179,4 @@ export async function getAnalytics() {
     return obj
   }
   return hydrate().analytics
-}
-
-export async function setAnalytics(key, value) {
-  if (supabaseConfigured) {
-    await supabase.from('analytics').upsert({ key, value })
-    return
-  }
-  const data = hydrate()
-  data.analytics = { ...data.analytics, [key]: value }
-  writeLS(data)
 }

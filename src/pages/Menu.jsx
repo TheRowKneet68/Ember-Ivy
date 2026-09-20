@@ -7,15 +7,19 @@ import { CATEGORIES } from '../data/seed.js'
 
 export default function Menu() {
   const [menu, setMenu] = useState([])
+  const [dbCats, setDbCats] = useState(null)
   const [cat, setCat] = useState('all')
 
   useEffect(() => {
     store.list('menu').then(setMenu).catch(() => setMenu([]))
+    store.list('categories').then((rows) => rows.length && setDbCats(rows)).catch(() => {})
   }, [])
 
-  const cats = [{ id: 'all', name: 'Everything', icon: '✦' }, ...CATEGORIES]
-  const shown = cat === 'all' ? menu : menu.filter((m) => m.category === cat)
+  const cats = [{ id: 'all', name: 'Everything', icon: '✦' }, ...(dbCats || CATEGORIES)]
   const activeCat = cats.find((c) => c.id === cat)
+  const shown = cat === 'all'
+    ? menu
+    : menu.filter((m) => m.category === cat || m.category === activeCat?.name)
 
   return (
     <>

@@ -19,18 +19,28 @@ export default function Home() {
   const [events, setEvents] = useState([])
   const [gallery, setGallery] = useState([])
   const [instagram, setInstagram] = useState(null)
+  const [slides, setSlides] = useState(HERO_SLIDES)
+  const [reviews, setReviews] = useState(REVIEWS)
+  const [team, setTeam] = useState(TEAM)
   const [sections, setSections] = useState(null)
   const [slide, setSlide] = useState(0)
 
   useEffect(() => {
-    const timer = setInterval(() => setSlide((s) => (s + 1) % HERO_SLIDES.length), 6000)
+    const total = slides.length || 1
+    const timer = setInterval(() => setSlide((s) => (s + 1) % total), 6000)
     return () => clearInterval(timer)
-  }, [])
+  }, [slides.length])
 
   useEffect(() => {
     store.list('menu').then(setMenu).catch(() => setMenu([]))
     store.list('events').then(setEvents).catch(() => setEvents([]))
     store.list('gallery').then(setGallery).catch(() => setGallery([]))
+    store.list('reviews').then((rows) => rows.length && setReviews(rows)).catch(() => {})
+    store.list('team').then((rows) => rows.length && setTeam(rows)).catch(() => {})
+    store.list('hero_slides').then((rows) => {
+      const srcs = rows.map((r) => r.image).filter(Boolean)
+      if (srcs.length) setSlides(rows)
+    }).catch(() => {})
     store.list('instagram').then((rows) => {
       const srcs = rows.map((r) => (typeof r === 'string' ? r : r.src)).filter(Boolean)
       if (srcs.length) setInstagram(srcs)
@@ -46,7 +56,7 @@ export default function Home() {
 
   return (
     <>
-      <Hero slide={slide} setSlide={setSlide} />
+      <Hero slides={slides} slide={slide} setSlide={setSlide} />
       {show('about') && <Marquee />}
       {show('about') && <About />}
       {show('features') && <Features />}
@@ -56,9 +66,9 @@ export default function Home() {
       {show('today') && <TodaySpecials />}
       {show('music') && <UpcomingMusic events={events} featuredEvent={featuredEvent} />}
       {show('gallery') && <GalleryPreview gallery={gallery} />}
-      {show('team') && <Team />}
+      {show('team') && <Team items={team} />}
       {show('instagram') && <Instagram items={instagram || INSTAGRAM} />}
-      {show('reviews') && <Reviews />}
+      {show('reviews') && <Reviews items={reviews} />}
       {show('awards') && <Awards />}
       {show('newsletter') && <Newsletter />}
       {show('cta') && <CtaBanner />}
@@ -67,11 +77,11 @@ export default function Home() {
 }
 
 /* ---------- Hero ---------- */
-function Hero({ slide, setSlide }) {
+function Hero({ slides, slide, setSlide }) {
   return (
     <section className="hero">
       <div className="hero-slides">
-        {HERO_SLIDES.map((s, i) => (
+        {slides.map((s, i) => (
           <div key={s.image} className={`hero-slide ${i === slide ? 'hero-slide--active' : ''}`}>
             <img src={s.image} alt={s.label} />
           </div>
@@ -125,7 +135,7 @@ function Hero({ slide, setSlide }) {
       </div>
 
       <div className="hero-dots">
-        {HERO_SLIDES.map((s, i) => (
+        {slides.map((s, i) => (
           <button
             key={s.image}
             className={`hero-dot ${i === slide ? 'hero-dot--active' : ''}`}
@@ -468,7 +478,7 @@ function GalleryPreview({ gallery }) {
 }
 
 /* ---------- Team ---------- */
-function Team() {
+function Team({ items }) {
   return (
     <section className="section">
       <div className="container">
@@ -478,7 +488,7 @@ function Team() {
           sub="The faces behind the coffee, the kitchen and the good nights."
         />
         <div className="team-grid">
-          {TEAM.map((t, i) => (
+          {items.map((t, i) => (
             <Reveal key={t.id} delay={i * 0.08}>
               <div className="team-card">
                 <div className="t-avatar">
@@ -528,7 +538,7 @@ function Instagram({ items }) {
 }
 
 /* ---------- Reviews ---------- */
-function Reviews() {
+function Reviews({ items }) {
   return (
     <section className="section">
       <div className="container">
@@ -552,7 +562,7 @@ function Reviews() {
           </div>
         </Reveal>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
-          {REVIEWS.slice(0, 9).map((r, i) => (
+          {items.slice(0, 9).map((r, i) => (
             <Reveal key={r.id} delay={i * 0.07}>
               <article className="review-card">
                 <Stars rating={r.rating} />
@@ -561,7 +571,7 @@ function Reviews() {
                   <span className="r-avatar">{r.name.charAt(0)}</span>
                   <div>
                     <div className="r-name">{r.name}</div>
-                    <div className="r-meta">{r.when} · {r.tag}</div>
+                    <div className="r-meta">{r.when || r.review_date} · {r.tag}</div>
                   </div>
                 </footer>
               </article>

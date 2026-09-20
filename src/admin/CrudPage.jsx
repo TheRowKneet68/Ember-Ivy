@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { store } from '../lib/store.js'
-import { RESOURCE_INDEX } from './fields.jsx'
+import { RESOURCE_INDEX, CAT_OPTIONS } from './fields.jsx'
 import { useToast } from './AdminApp.jsx'
 
 export default function CrudPage({ resourceKey }) {
@@ -9,10 +9,24 @@ export default function CrudPage({ resourceKey }) {
   const [rows, setRows] = useState(null)
   const [editing, setEditing] = useState(null)
   const [busy, setBusy] = useState(false)
+  const [catOptions, setCatOptions] = useState(null)
 
   useEffect(() => {
     let alive = true
     store.list(resourceKey).then((data) => alive && setRows(data)).catch(() => alive && setRows([]))
+    return () => {
+      alive = false
+    }
+  }, [resourceKey])
+
+  useEffect(() => {
+    if (resourceKey !== 'menu') return
+    let alive = true
+    store.list('categories').then((cats) => {
+      if (!alive) return
+      const names = (cats || []).map((c) => c.name || c).filter(Boolean)
+      if (names.length) setCatOptions(Array.from(new Set([...CAT_OPTIONS, ...names])))
+    }).catch(() => {})
     return () => {
       alive = false
     }
@@ -83,7 +97,7 @@ export default function CrudPage({ resourceKey }) {
                   {f.type === 'select' && (
                     <select className="select" value={editing[key] || ''} onChange={(e) => setField(key, e.target.value)}>
                       <option value="">— select —</option>
-                      {f.options.map((o) => <option key={o} value={o}>{o}</option>)}
+                      {(key === 'category' && catOptions ? catOptions : f.options).map((o) => <option key={o} value={o}>{o}</option>)}
                     </select>
                   )}
                   {f.type === 'bool' && (

@@ -12,10 +12,10 @@ export const SITE = {
   rating: 4.7,
   reviewCount: 19,
   hours: { open: '7:00 AM', close: '1:00 AM', label: 'Open Daily' },
-  phone: import.meta.env.VITE_PHONE || '+977 982 911 7277',
-  phoneRaw: (import.meta.env.VITE_PHONE || '+977 982 911 7277').replace(/[^\d+]/g, ''),
+  phone: import.meta.env.VITE_PHONE || '+977 980 000 0000',
+  phoneRaw: (import.meta.env.VITE_PHONE || '+977 980 000 0000').replace(/[^\d+]/g, ''),
   email: import.meta.env.VITE_EMAIL || 'hello@emberandivy.com',
-  watermark: 'Made by Ronit Baniya · Surkasha Ghar · 9829117277',
+  watermark: import.meta.env.VITE_WATERMARK || '',
   mapEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3515.867133044501!2d83.95707639999999!3d28.2113491!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399595e4ea573c43%3A0x473412e0f8cf5da9!2sEmber%20%26%20Ivy!5e0!3m2!1sen!2snp!4v1785597178093!5m2!1sen!2snp',
   mapLink: 'https://maps.google.com/?q=Ember+%26+Ivy+Lakeside+Pokhara',

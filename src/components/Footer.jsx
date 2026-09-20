@@ -83,7 +83,8 @@ export default function Footer() {
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} {SITE.name}. All rights reserved.</span>
           <span>
-            Made with <span className="heart">✦</span> in Pokhara — {SITE.watermark}
+            Made with <span className="heart">✦</span> in Pokhara
+            {SITE.watermark && <span> · {SITE.watermark}</span>}
           </span>
         </div>
       </div>

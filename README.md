@@ -42,6 +42,13 @@ Copy `.env.example` to `.env.local` and fill in what you have:
 | `VITE_EMAILJS_SERVICE_ID` / `TEMPLATE_ID` / `PUBLIC_KEY` | Send reservation/contact/newsletter emails. |
 | `VITE_ADMIN_EMAIL` / `VITE_ADMIN_PASSWORD` | Demo-mode admin login (default `admin@emberandivy.com` / `ember-admin`). |
 | `VITE_EMAIL` / `VITE_PHONE` | Contact info shown across the site. |
+| `VITE_WATERMARK` | Optional footer credit line; leave empty to hide. |
+
+## Documentation
+
+- [`docs/DATABASE.md`](docs/DATABASE.md) — schema, row-level security, and how the app reads/writes data.
+- [`docs/TESTING.md`](docs/TESTING.md) — feature-by-feature QA checklist.
+- [`docs/PROJECT_REPORT.md`](docs/PROJECT_REPORT.md) — handover report for the client/developer.
 
 ## Admin panel
 

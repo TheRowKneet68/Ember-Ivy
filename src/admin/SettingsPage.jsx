@@ -31,23 +31,29 @@ export default function SettingsPage() {
 
   const sections = settings.sections || Object.fromEntries(SECTIONS.map((s) => [s.key, true]))
 
-  async function patch(obj) {
-    const next = { ...settings, ...obj }
-    setSettings(next)
-    await saveSetting('site', next)
-    toast.success('Saved.')
+  async function toggleSection(key) {
+    const next = { ...sections, [key]: !sections[key] }
+    setSettings((s) => ({ ...s, sections: next }))
+    try {
+      await saveSetting('sections', next)
+      toast.success('Saved.')
+    } catch (err) {
+      toast.error(err.message || 'Save failed.')
+    }
   }
 
-  function toggleSection(key) {
-    patch({ sections: { ...sections, [key]: !sections[key] } })
-  }
-
-  function setTheme(t) {
+  async function setTheme(t) {
     document.documentElement.classList.toggle('light', t === 'light')
     try {
       localStorage.setItem('ei-theme', t)
     } catch {}
-    patch({ defaultTheme: t })
+    setSettings((s) => ({ ...s, defaultTheme: t }))
+    try {
+      await saveSetting('defaultTheme', t)
+      toast.success('Saved.')
+    } catch (err) {
+      toast.error(err.message || 'Save failed.')
+    }
   }
 
   return (

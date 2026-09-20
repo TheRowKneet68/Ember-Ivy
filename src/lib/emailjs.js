@@ -6,10 +6,6 @@ const PUBLIC = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
 export const emailjsConfigured = Boolean(SERVICE && TEMPLATE && PUBLIC)
 
-export function initEmailJS() {
-  if (emailjsConfigured) emailjs.init({ publicKey: PUBLIC })
-}
-
 /**
  * Sends an email through EmailJS.
  * Returns { ok: true } on success, { ok: false, demo: true } when EmailJS is
@@ -21,7 +17,7 @@ export async function sendEmail({ to_name = 'Guest', subject, message_html }) {
     return { ok: false, demo: true }
   }
   try {
-    await emailjs.send(SERVICE, TEMPLATE, { to_name, subject, message_html })
+    await emailjs.send(SERVICE, TEMPLATE, { to_name, subject, message_html }, { publicKey: PUBLIC })
     return { ok: true }
   } catch (err) {
     console.error('EmailJS send failed:', err)
