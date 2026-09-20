@@ -101,10 +101,10 @@ where not exists (select 1 from public.reviews);
 
 insert into public.events (title, date, time, tag, description, image, cover, featured, created_at)
 select title, date, time, tag, description, image, cover, featured, created_at from (values
-  ('Acoustic Evening — Sagar & The Strings', '2026-08-07', '8:00 PM', 'Live Music', 'An intimate acoustic set under warm lights. Covers and originals, up close.', '/images/live-1.svg', 0, true, now() - (4) * interval '1 hour'),
-  ('Neon Friday — DJ Aarav', '2026-08-14', '9:00 PM', 'DJ Night', 'House, afrobeat and late-night edits on the rooftop bar.', '/images/live-2.svg', 0, false, now() - (3) * interval '1 hour'),
-  ('Jazz & Wine Sunday', '2026-08-23', '6:30 PM', 'Live Music', 'Smooth jazz trio, a curated wine flight and slow Sunday pacing.', '/images/live-3.svg', 0, false, now() - (2) * interval '1 hour'),
-  ('Garden Bistro Market', '2026-08-30', '11:00 AM', 'Weekend Event', 'Produce stalls, live cooking stations and our coffee cart on the lawn.', '/images/outdoor-1.svg', 0, false, now() - (1) * interval '1 hour')
+  ('Acoustic Evening — Sagar & The Strings', '2026-08-07'::date, '8:00 PM', 'Live Music', 'An intimate acoustic set under warm lights. Covers and originals, up close.', '/images/live-1.svg', 0, true, now() - (4) * interval '1 hour'),
+  ('Neon Friday — DJ Aarav', '2026-08-14'::date, '9:00 PM', 'DJ Night', 'House, afrobeat and late-night edits on the rooftop bar.', '/images/live-2.svg', 0, false, now() - (3) * interval '1 hour'),
+  ('Jazz & Wine Sunday', '2026-08-23'::date, '6:30 PM', 'Live Music', 'Smooth jazz trio, a curated wine flight and slow Sunday pacing.', '/images/live-3.svg', 0, false, now() - (2) * interval '1 hour'),
+  ('Garden Bistro Market', '2026-08-30'::date, '11:00 AM', 'Weekend Event', 'Produce stalls, live cooking stations and our coffee cart on the lawn.', '/images/outdoor-1.svg', 0, false, now() - (1) * interval '1 hour')
 ) as v(title, date, time, tag, description, image, cover, featured, created_at)
 where not exists (select 1 from public.events);
 
