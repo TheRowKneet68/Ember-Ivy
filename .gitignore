@@ -9,6 +9,9 @@ dist-ssr
 *.log
 npm-debug.log*
 
+# Reference sample (university materials — never commit)
+sample/
+
 # Env files — never commit secrets
 .env
 .env.local
