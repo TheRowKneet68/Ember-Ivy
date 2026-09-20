@@ -34,17 +34,28 @@ real database and admin authentication; enabling EmailJS sends real emails.
   keyboard-friendly lightbox).
 
 ### 2.2 Admin panel (`/admin`)
-Dashboard (stats + recent reservations), menu management (all resources),
-settings (experimental section toggles + default theme), authenticated via
-Supabase Auth (or demo credentials without Supabase).
+Role-based panel for non-technical users:
+- **Admins** — dashboard, content management (all resources), reservations,
+  page settings, user accounts, image uploads.
+- **Employees** — content management + image uploads only (no reservations,
+  settings or user management).
+- **Clients** — guest portal with **My Reservations**: sees only their own
+  bookings and can cancel one that is still pending.
+- Image uploads are auto-compressed in the browser (WebP, resized) and stored
+  in Supabase Storage — no technical knowledge needed.
+- Authenticated via Supabase Auth (or demo credentials without Supabase).
 
 ### 2.3 Backend (Supabase, optional but production-ready)
-- `supabase/schema.sql` — idempotent schema, RLS on every table.
+- `supabase/schema.sql` — idempotent schema, RLS on every table, role-based
+  access via the `profiles` table (`admin` / `employee` / `client`).
 - Public site: read-only on content, reservation insert locked to
   `pending`, visit counter increments only the `visits` row.
-- Admin (authenticated): full CRUD on all tables.
-- No read access for the public to private data (reservations, settings,
-  private analytics).
+- Admins: content + reservations + settings + analytics + user accounts.
+  Employees: content + uploads. Clients: own reservations only.
+- Account management in the panel uses admin-protected database RPCs
+  (`admin_create_user`, `admin_set_role`, `admin_delete_user`) — no
+  service-role key on the client.
+- Public image storage bucket `content` (public read, staff write).
 - See [`DATABASE.md`](DATABASE.md).
 
 ### 2.4 Docs
@@ -73,6 +84,20 @@ Supabase Auth (or demo credentials without Supabase).
   router-level one.
 - **Dead code removed** — unused singleton flag, store `count`/`setAnalytics`,
   unused `initEmailJS`.
+- **Role-based access** — accounts now have `admin` / `employee` / `client`
+  levels; the admin panel and the database enforce them (employees can't see
+  reservations, clients only their own).
+- **User management in the panel** — admins create accounts, set roles and
+  remove users without touching the dashboard (admin-protected DB RPCs).
+- **Guest portal** — clients log in to a friendly “My Reservations” screen
+  and can cancel their own pending booking.
+- **Photo upload with compression** — every photo field now has an
+  “Upload picture” button: images are resized + WebP-compressed in the
+  browser and stored in Supabase Storage (demo mode: compact copy in the
+  browser). Non-technical users no longer need to type paths.
+- **Admin friendliness** — clearer labels (“Home Banner”, “Instagram Feed”,
+  “Page Settings”), a starter guide on the dashboard, and one-line
+  descriptions under each management page.
 
 ## 4. Performance (real build output, Vite 5.4.21)
 
@@ -118,15 +143,21 @@ Vercel or Netlify out of the box:
 Items that cannot be completed without the client's real accounts/values:
 
 1. **Supabase project + credentials** — create project, run `schema.sql`,
-   enable Email auth, create admin user. *(schema verified by review; run
-   once in the client project.)*
-2. **Real venue contact** — phone, email, address, social links, map pin.
-3. **Real Google reviews / rating + review count** — or update the demo values.
-4. **Menu prices confirm** — seed prices are plausible placeholders.
-5. **EmailJS account/template** — optional; without keys, form submissions
+   then `seed.sql` (front-fills menu/categories/reviews/events/gallery/hero/
+   team/Instagram with the sample café data + the repo's SVG images), enable
+   Email auth, create admin user. *(schema verified by review; run once in
+   the client project.)* The schema also creates the `content` storage
+   bucket and the `profiles` role system — existing accounts are backfilled
+   as admins automatically.
+2. **Create app accounts** — sign in as the first admin, then use
+   **Users & Access** to add employees/clients (no dashboard needed).
+3. **Real venue contact** — phone, email, address, social links, map pin.
+4. **Real Google reviews / rating + review count** — or update the demo values.
+5. **Menu prices confirm** — seed prices are plausible placeholders.
+6. **EmailJS account/template** — optional; without keys, form submissions
    are saved but not emailed.
-6. **`VITE_WATERMARK`** — optional footer credit line.
-7. **Footer/boilerplate text** — fine-tune "Made with ✦ in Pokhara".
+7. **`VITE_WATERMARK`** — optional footer credit line.
+8. **Footer/boilerplate text** — fine-tune "Made with ✦ in Pokhara".
 
 Everything else is verified and working in demo mode.
 
@@ -134,5 +165,8 @@ Everything else is verified and working in demo mode.
 
 - Supabase/EmailJS paths are implemented and reviewed but **not exercised
   against a live client project** — first live run is part of the checklist
-  above.
+  above (incl. the admin RPCs and image uploads).
+- A **client account** only sees reservations booked with the **same email**
+  they sign in with; the public booking form's email field is optional, so a
+  guest who books without an email won't appear in a client portal.
 - Restaurant menu "recipes"/prices are editorial content owned by the venue.

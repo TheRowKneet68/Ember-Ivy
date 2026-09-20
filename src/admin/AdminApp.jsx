@@ -6,6 +6,8 @@ import Dashboard from './Dashboard.jsx'
 import CrudPage from './CrudPage.jsx'
 import ReservationsPage from './ReservationsPage.jsx'
 import SettingsPage from './SettingsPage.jsx'
+import UsersPage from './UsersPage.jsx'
+import MyReservations from './MyReservations.jsx'
 
 /* ---------- Toast ---------- */
 const ToastCtx = createContext(null)
@@ -36,25 +38,29 @@ function ToastProvider({ children }) {
   )
 }
 
-/* ---------- Nav ---------- */
+/* ---------- Nav (per role) ---------- */
 const NAV = [
-  { to: '/admin/dashboard', label: 'Dashboard', icon: '⌂' },
-  { to: '/admin/menu', label: 'Menu', icon: '🍽️' },
-  { to: '/admin/categories', label: 'Categories', icon: '🗂️' },
-  { to: '/admin/gallery', label: 'Gallery', icon: '🖼️' },
-  { to: '/admin/reviews', label: 'Reviews', icon: '⭐' },
-  { to: '/admin/reservations', label: 'Reservations', icon: '🕰️' },
-  { to: '/admin/events', label: 'Events', icon: '🎶' },
-  { to: '/admin/hero', label: 'Hero Slides', icon: '🎬' },
-  { to: '/admin/team', label: 'Team', icon: '👥' },
-  { to: '/admin/instagram', label: 'Instagram', icon: '📸' },
-  { to: '/admin/settings', label: 'Settings & Theme', icon: '⚙️' }
+  { to: '/admin/dashboard', label: 'Dashboard', icon: '⌂', roles: ['admin', 'employee'] },
+  { to: '/admin/menu', label: 'Menu', icon: '🍽️', roles: ['admin', 'employee'] },
+  { to: '/admin/categories', label: 'Categories', icon: '🗂️', roles: ['admin', 'employee'] },
+  { to: '/admin/gallery', label: 'Gallery', icon: '🖼️', roles: ['admin', 'employee'] },
+  { to: '/admin/reviews', label: 'Reviews', icon: '⭐', roles: ['admin', 'employee'] },
+  { to: '/admin/events', label: 'Events', icon: '🎶', roles: ['admin', 'employee'] },
+  { to: '/admin/hero', label: 'Home Banner', icon: '🎬', roles: ['admin', 'employee'] },
+  { to: '/admin/team', label: 'Team', icon: '👥', roles: ['admin', 'employee'] },
+  { to: '/admin/instagram', label: 'Instagram Feed', icon: '📸', roles: ['admin', 'employee'] },
+  { to: '/admin/reservations', label: 'Reservations', icon: '🕰️', roles: ['admin'] },
+  { to: '/admin/users', label: 'Users & Access', icon: '🔐', roles: ['admin'] },
+  { to: '/admin/settings', label: 'Page Settings', icon: '⚙️', roles: ['admin'] }
 ]
 
-function AdminLayout({ children }) {
-  const { signOut, mode } = useAuth()
+const ROLE_LABEL = { admin: 'Admin', employee: 'Employee', client: 'Client' }
+
+function AdminShell({ children, client = false }) {
+  const { signOut, mode, role } = useAuth()
   const { pathname } = useLocation()
-  const current = NAV.find((n) => pathname.startsWith(n.to))
+  const items = client ? [{ to: '/admin/my', label: 'My Reservations', icon: '🕰️' }] : NAV.filter((n) => (n.roles || []).includes(role))
+  const current = items.find((n) => pathname.startsWith(n.to)) || (client ? { label: 'My Reservations' } : null)
   return (
     <div className="admin-shell">
       <aside className="admin-side">
@@ -62,11 +68,11 @@ function AdminLayout({ children }) {
           <span className="monogram">E&I</span>
           <span className="wordmark">
             Ember &amp; Ivy
-            <small>Admin Panel</small>
+            <small>{client ? 'Guest Portal' : 'Admin Panel'}</small>
           </span>
         </div>
         <nav className="a-nav">
-          {NAV.map((n) => (
+          {items.map((n) => (
             <NavLink key={n.to} to={n.to} className={({ isActive }) => (isActive ? 'active' : '')}>
               <span className="a-ico">{n.icon}</span> {n.label}
             </NavLink>
@@ -77,7 +83,8 @@ function AdminLayout({ children }) {
         <div className="admin-topbar">
           <h1>{current?.label || 'Dashboard'}</h1>
           <div className="at-user">
-            <span className="badge badge--pop">{mode === 'supabase' ? 'Supabase' : 'Demo mode'}</span>
+            <span className="badge badge--pop">{role ? ROLE_LABEL[role] || role : ''}</span>
+            <span className="badge">{mode === 'supabase' ? 'Supabase' : 'Demo mode'}</span>
             <Link to="/" className="btn btn--dark btn--sm">View Site</Link>
             <button className="btn btn--ghost btn--sm" onClick={signOut}>Sign Out</button>
           </div>
@@ -116,7 +123,7 @@ function Login() {
           <span className="monogram">E&I</span>
           <h1>Ember &amp; Ivy Admin</h1>
           <p className="form-note" style={{ textAlign: 'center' }}>
-            Sign in to manage the menu, gallery, reviews, reservations and events.
+            Sign in to manage the menu, gallery, reviews and reservations.
           </p>
         </div>
         <div className="field">
@@ -136,9 +143,31 @@ function Login() {
   )
 }
 
+function RequireRole({ need, children }) {
+  const { role } = useAuth()
+  if (role === need) return children
+  return <Navigate to="/admin/dashboard" replace />
+}
+
+function NoAccess() {
+  const { signOut } = useAuth()
+  return (
+    <div className="admin-card">
+      <div className="ac-body" style={{ padding: 26 }}>
+        <h3>No access yet</h3>
+        <p className="form-note" style={{ marginTop: 8 }}>
+          You’re signed in, but this account has no access level yet. Ask the owner to set one in
+          <strong> Users &amp; Access</strong>.
+        </p>
+        <button className="btn btn--ghost btn--sm" onClick={signOut} style={{ marginTop: 12 }}>Sign Out</button>
+      </div>
+    </div>
+  )
+}
+
 /* ---------- Root ---------- */
 function AdminPanel() {
-  const { user, loading } = useAuth()
+  const { user, role, loading } = useAuth()
 
   if (loading) {
     return (
@@ -150,23 +179,43 @@ function AdminPanel() {
 
   if (!user) return <Login />
 
+  if (role === 'client') {
+    return (
+      <AdminShell client>
+        <Routes>
+          <Route path="my" element={<MyReservations />} />
+          <Route path="*" element={<Navigate to="/admin/my" replace />} />
+        </Routes>
+      </AdminShell>
+    )
+  }
+
+  if (role !== 'admin' && role !== 'employee') {
+    return (
+      <AdminShell>
+        <NoAccess />
+      </AdminShell>
+    )
+  }
+
   return (
-    <AdminLayout>
+    <AdminShell>
       <Routes>
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<Dashboard role={role} />} />
         <Route path="menu" element={<CrudPage resourceKey="menu" />} />
         <Route path="categories" element={<CrudPage resourceKey="categories" />} />
         <Route path="gallery" element={<CrudPage resourceKey="gallery" />} />
         <Route path="reviews" element={<CrudPage resourceKey="reviews" />} />
-        <Route path="reservations" element={<ReservationsPage />} />
         <Route path="events" element={<CrudPage resourceKey="events" />} />
         <Route path="hero" element={<CrudPage resourceKey="hero_slides" />} />
         <Route path="team" element={<CrudPage resourceKey="team" />} />
         <Route path="instagram" element={<CrudPage resourceKey="instagram" />} />
-        <Route path="settings" element={<SettingsPage />} />
+        <Route path="reservations" element={<RequireRole need="admin"><ReservationsPage /></RequireRole>} />
+        <Route path="users" element={<RequireRole need="admin"><UsersPage /></RequireRole>} />
+        <Route path="settings" element={<RequireRole need="admin"><SettingsPage /></RequireRole>} />
         <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
       </Routes>
-    </AdminLayout>
+    </AdminShell>
   )
 }
 

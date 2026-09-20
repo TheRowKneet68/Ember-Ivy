@@ -1,47 +1,60 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase, supabaseConfigured } from '../lib/supabase.js'
+import { demoSignIn } from '../lib/users.js'
 
 const AuthContext = createContext(null)
 
-const DEMO_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || 'admin@emberandivy.com'
-const DEMO_PASS = import.meta.env.VITE_ADMIN_PASSWORD || 'ember-admin'
+async function fetchRole(id) {
+  try {
+    const { data } = await supabase.from('profiles').select('role').eq('id', id).maybeSingle()
+    return data?.role || null
+  } catch {
+    return null
+  }
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
+  const [role, setRole] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (supabaseConfigured) {
-      supabase.auth.getSession().then(({ data }) => {
-        setUser(data.session?.user || null)
+      supabase.auth.getSession().then(async ({ data }) => {
+        const u = data.session?.user || null
+        setUser(u)
+        setRole(u ? await fetchRole(u.id) : null)
         setLoading(false)
       })
-      const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-        setUser(session?.user || null)
+      const { data: sub } = supabase.auth.onAuthStateChange(async (_e, session) => {
+        const u = session?.user || null
+        setUser(u)
+        setRole(u ? await fetchRole(u.id) : null)
         setLoading(false)
       })
       return () => sub?.subscription?.unsubscribe()
     }
     try {
       setUser(sessionStorage.getItem('ei-admin-user') || null)
+      setRole(sessionStorage.getItem('ei-admin-role') || null)
     } catch {}
     setLoading(false)
   }, [])
 
   async function signIn(email, password) {
     if (supabaseConfigured) {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      const { error, data } = await supabase.auth.signInWithPassword({ email, password })
       if (error) throw new Error(error.message)
+      setRole(await fetchRole(data.user.id))
       return
     }
-    if (email.trim().toLowerCase() === DEMO_EMAIL.toLowerCase() && password === DEMO_PASS) {
-      try {
-        sessionStorage.setItem('ei-admin-user', email)
-      } catch {}
-      setUser(email)
-      return
-    }
-    throw new Error('Invalid admin credentials.')
+    const row = await demoSignIn(email, password)
+    try {
+      sessionStorage.setItem('ei-admin-user', row.email)
+      sessionStorage.setItem('ei-admin-role', row.role)
+    } catch {}
+    setUser(row.email)
+    setRole(row.role)
   }
 
   async function signOut() {
@@ -50,11 +63,13 @@ export function AuthProvider({ children }) {
     }
     try {
       sessionStorage.removeItem('ei-admin-user')
+      sessionStorage.removeItem('ei-admin-role')
     } catch {}
     setUser(null)
+    setRole(null)
   }
 
-  const value = { user, loading, signIn, signOut, mode: supabaseConfigured ? 'supabase' : 'demo' }
+  const value = { user, role, loading, signIn, signOut, mode: supabaseConfigured ? 'supabase' : 'demo' }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 

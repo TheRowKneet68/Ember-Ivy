@@ -9,7 +9,8 @@ const T = {
   num: (label) => ({ label, type: 'number' }),
   date: (label) => ({ label, type: 'date' }),
   bool: (label) => ({ label, type: 'bool' }),
-  select: (label, options) => ({ label, type: 'select', options })
+  select: (label, options) => ({ label, type: 'select', options }),
+  image: (label) => ({ label, type: 'image' })
 }
 
 export const RESOURCES = [
@@ -22,7 +23,7 @@ export const RESOURCES = [
       description: T.area('Description'),
       price: T.num('Price (Rs)'),
       category: T.select('Category', CAT_OPTIONS),
-      image: T.text('Image path (e.g. /images/food-1.svg)'),
+      image: T.image('Photo'),
       veg: T.bool('Vegetarian'),
       popular: T.bool('Popular badge'),
       chef: T.bool('Chef’s pick'),
@@ -33,7 +34,7 @@ export const RESOURCES = [
   {
     key: 'categories',
     title: 'Category Management',
-    desc: 'Menu categories shown as tabs.',
+    desc: 'Menu categories shown as tabs. Add, rename or remove — the menu page updates automatically.',
     fields: {
       name: T.text('Name'),
       icon: T.text('Emoji icon'),
@@ -46,7 +47,7 @@ export const RESOURCES = [
     title: 'Gallery',
     desc: 'Photos shown across the site.',
     fields: {
-      src: T.text('Image path'),
+      src: T.image('Photo'),
       title: T.text('Title'),
       cat: T.select('Category', GAL_OPTIONS)
     }
@@ -73,17 +74,17 @@ export const RESOURCES = [
       time: T.text('Time'),
       tag: T.text('Tag'),
       description: T.area('Description'),
-      image: T.text('Image path'),
+      image: T.image('Photo'),
       cover: T.num('Cover (Rs, 0 = free)'),
       featured: T.bool('Featured')
     }
   },
   {
     key: 'hero_slides',
-    title: 'Hero Slides',
-    desc: 'Background slideshow images.',
+    title: 'Home Banner',
+    desc: 'Background slideshow images on the home page.',
     fields: {
-      image: T.text('Image path'),
+      image: T.image('Background photo'),
       label: T.text('Slide label'),
       sort: T.num('Sort order')
     }
@@ -95,7 +96,7 @@ export const RESOURCES = [
     fields: {
       name: T.text('Name'),
       role: T.text('Role'),
-      image: T.text('Image path'),
+      image: T.image('Photo'),
       bio: T.area('Short bio')
     }
   },
@@ -104,7 +105,7 @@ export const RESOURCES = [
     title: 'Instagram Feed',
     desc: 'Images on the home feed.',
     fields: {
-      src: T.text('Image path'),
+      src: T.image('Photo'),
       link: T.text('Post link'),
       sort: T.num('Sort order')
     }

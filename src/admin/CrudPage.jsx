@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { store } from '../lib/store.js'
 import { RESOURCE_INDEX, CAT_OPTIONS } from './fields.jsx'
 import { useToast } from './AdminApp.jsx'
+import ImageField from './ImageField.jsx'
 
 export default function CrudPage({ resourceKey }) {
   const cfg = RESOURCE_INDEX[resourceKey]
@@ -118,8 +119,8 @@ export default function CrudPage({ resourceKey }) {
                   )}
                   {f.type === 'date' && <input className="input" type="date" value={editing[key] || ''} onChange={(e) => setField(key, e.target.value)} />}
                   {f.type === 'text' && <input className="input" value={editing[key] || ''} onChange={(e) => setField(key, e.target.value)} />}
-                  {key === 'image' && editing.image && (
-                    <img src={editing.image} alt="preview" style={{ width: 90, borderRadius: 10, marginTop: 6 }} />
+                  {f.type === 'image' && (
+                    <ImageField label={f.label} value={editing[key] || ''} onChange={(v) => setField(key, v)} />
                   )}
                 </div>
               ))}
@@ -153,8 +154,8 @@ export default function CrudPage({ resourceKey }) {
                     <tr key={row.id}>
                       {columns.map(([key]) => (
                         <td key={key}>
-                          {key === 'image' && row.image ? (
-                            <img src={row.image} alt="" style={{ width: 56, height: 42, objectFit: 'cover', borderRadius: 8 }} />
+                          {cfg.fields[key].type === 'image' && row[key] ? (
+                            <img src={row[key]} alt="" style={{ width: 56, height: 42, objectFit: 'cover', borderRadius: 8 }} />
                           ) : typeof row[key] === 'boolean' ? (
                             row[key] ? '✓' : '—'
                           ) : (

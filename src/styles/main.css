@@ -2772,3 +2772,60 @@ html.light .badge--seasonal {
     width: 100%;
   }
 }
+
+/* ---------- Admin: image uploader ---------- */
+.image-field {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.if-preview {
+  width: 132px;
+  height: 88px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px dashed var(--line-soft);
+  background: var(--surface-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.if-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.if-empty {
+  color: var(--muted);
+  font-size: 12.5px;
+  text-align: center;
+  padding: 0 8px;
+}
+
+/* ---------- Admin: starter guide ---------- */
+.guide-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  background: linear-gradient(135deg, rgba(196, 141, 44, .16), rgba(196, 141, 44, .04));
+  border: 1px solid rgba(196, 141, 44, .3);
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 26px;
+}
+.guide-card strong {
+  color: var(--gold, #c48d2c);
+  font-size: 15px;
+}
+.guide-card p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+.guide-card a:not(.btn) {
+  color: var(--gold, #c48d2c);
+  text-decoration: underline;
+}

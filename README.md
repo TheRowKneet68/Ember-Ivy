@@ -52,9 +52,15 @@ Copy `.env.example` to `.env.local` and fill in what you have:
 
 ## Admin panel
 
-Open `/admin`. With Supabase configured you sign in with the email/password user you create under **Auth → Users**. Otherwise use the demo credentials above.
+Open `/admin`. With Supabase configured you sign in with the email/password user you create under **Auth → Users**; existing accounts are made admins automatically. Otherwise use the demo credentials above.
 
-Manage: dashboard stats · menu items · categories · gallery · reviews · reservations (confirm/cancel) · events · hero slides · team · Instagram feed · settings & theme (show/hide homepage sections, default theme).
+Three access levels (set under **Users & Access**):
+
+- **Admin** — everything: content, reservations, page settings, users, uploads.
+- **Employee** — content only (menu, gallery, events, …) + image uploads.
+- **Client** — a guest portal showing only their own reservations (with self-serve cancel).
+
+Manage: dashboard stats · menu items · categories · gallery · reviews · reservations (confirm/cancel) · events · home banner · team · Instagram feed · user accounts · settings & theme. Every photo field has an **Upload picture** button that auto-compresses the image (WebP) — nothing to configure.
 
 ## Supabase setup
 
