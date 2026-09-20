@@ -6,6 +6,7 @@ import Dashboard from './Dashboard.jsx'
 import CrudPage from './CrudPage.jsx'
 import ReservationsPage from './ReservationsPage.jsx'
 import SettingsPage from './SettingsPage.jsx'
+import ImagesPage from './ImagesPage.jsx'
 import UsersPage from './UsersPage.jsx'
 import MyReservations from './MyReservations.jsx'
 
@@ -49,6 +50,7 @@ const NAV = [
   { to: '/admin/hero', label: 'Home Banner', icon: '🎬', roles: ['admin', 'employee'] },
   { to: '/admin/team', label: 'Team', icon: '👥', roles: ['admin', 'employee'] },
   { to: '/admin/instagram', label: 'Instagram Feed', icon: '📸', roles: ['admin', 'employee'] },
+  { to: '/admin/images', label: 'Site Images', icon: '📷', roles: ['admin'] },
   { to: '/admin/reservations', label: 'Reservations', icon: '🕰️', roles: ['admin'] },
   { to: '/admin/users', label: 'Users & Access', icon: '🔐', roles: ['admin'] },
   { to: '/admin/settings', label: 'Page Settings', icon: '⚙️', roles: ['admin'] }
@@ -212,6 +214,7 @@ function AdminPanel() {
         <Route path="instagram" element={<CrudPage resourceKey="instagram" />} />
         <Route path="reservations" element={<RequireRole need="admin"><ReservationsPage /></RequireRole>} />
         <Route path="users" element={<RequireRole need="admin"><UsersPage /></RequireRole>} />
+        <Route path="images" element={<RequireRole need="admin"><ImagesPage /></RequireRole>} />
         <Route path="settings" element={<RequireRole need="admin"><SettingsPage /></RequireRole>} />
         <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
       </Routes>

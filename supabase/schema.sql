@@ -258,7 +258,7 @@ drop policy if exists admin_all_settings on public.settings;
 drop policy if exists public_read_settings on public.settings;
 create policy public_read_settings on public.settings
   for select
-  using (key in ('theme', 'rating', 'sections', 'defaultTheme'));
+  using (key in ('theme', 'rating', 'sections', 'defaultTheme') or key like 'img\_%');
 
 drop policy if exists admin_manage_settings on public.settings;
 create policy admin_manage_settings on public.settings
@@ -297,14 +297,17 @@ create policy profiles_select_admin on public.profiles
   for select using (app_role() = 'admin');
 
 drop policy if exists profiles_write_admin on public.profiles;
+drop policy if exists profiles_insert_admin on public.profiles;
 create policy profiles_insert_admin on public.profiles
   for insert to authenticated
   with check (app_role() = 'admin');
 
+drop policy if exists profiles_update_admin on public.profiles;
 create policy profiles_update_admin on public.profiles
   for update to authenticated
   using (app_role() = 'admin') with check (app_role() = 'admin');
 
+drop policy if exists profiles_delete_admin on public.profiles;
 create policy profiles_delete_admin on public.profiles
   for delete to authenticated
   using (app_role() = 'admin');

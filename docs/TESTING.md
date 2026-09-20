@@ -66,6 +66,10 @@ npm run build && npm run preview   # production build check
       browser). Pasting a path/link still works.
 - [ ] Reservations: confirm / cancel changes the badge on the public side.
 - [ ] Settings: hide a homepage section; saves (and survives reload).
+- [ ] Settings: switch the theme to light and back — no errors (fixed the
+      duplicate-key save bug).
+- [ ] **Site Images**: change the About / Chef / CTA / Today's Specials photos;
+      reload the homepage to confirm the new pictures render.
 - [ ] **Users & Access** (admin only):
       - create an account with each role (Admin / Employee / Client);
       - the new admin/employee can sign in and sees only their allowed menu items;

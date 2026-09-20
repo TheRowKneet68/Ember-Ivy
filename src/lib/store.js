@@ -148,7 +148,7 @@ export async function getSettings() {
 
 export async function saveSetting(key, value) {
   if (supabaseConfigured) {
-    const { error } = await supabase.from('settings').upsert({ key, value })
+    const { error } = await supabase.from('settings').upsert({ key, value }, { onConflict: 'key' })
     if (error) throw new Error(error.message)
     return
   }
@@ -163,7 +163,7 @@ export async function trackVisit() {
   if (supabaseConfigured) {
     const { data } = await supabase.from('analytics').select('*').eq('key', 'visits').maybeSingle()
     const next = (data?.value || 0) + 1
-    await supabase.from('analytics').upsert({ key: 'visits', value: next })
+    await supabase.from('analytics').upsert({ key: 'visits', value: next }, { onConflict: 'key' })
     return
   }
   const data = hydrate()

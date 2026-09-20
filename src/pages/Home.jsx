@@ -9,6 +9,7 @@ import MenuCard from '../components/MenuCard.jsx'
 import Countdown from '../components/Countdown.jsx'
 import Newsletter from '../components/Newsletter.jsx'
 import { store, getSettings } from '../lib/store.js'
+import { pickPics } from '../lib/siteImages.js'
 import {
   SITE, HERO_SLIDES, FEATURES, REVIEWS, REVIEW_TAGS, TEAM, INSTAGRAM,
   AWARDS, TODAY_SPECIALS
@@ -23,6 +24,7 @@ export default function Home() {
   const [reviews, setReviews] = useState(REVIEWS)
   const [team, setTeam] = useState(TEAM)
   const [sections, setSections] = useState(null)
+  const [siteSettings, setSiteSettings] = useState({})
   const [slide, setSlide] = useState(0)
 
   useEffect(() => {
@@ -45,12 +47,13 @@ export default function Home() {
       const srcs = rows.map((r) => (typeof r === 'string' ? r : r.src)).filter(Boolean)
       if (srcs.length) setInstagram(srcs)
     }).catch(() => {})
-    getSettings().then((s) => setSections(s.sections || null)).catch(() => setSections(null))
+    getSettings().then((s) => { setSections(s.sections || null); setSiteSettings(s || {}) }).catch(() => setSections(null))
   }, [])
 
   const popular = menu.filter((m) => m.popular).slice(0, 8)
   const chefSpecials = menu.filter((m) => m.chef).slice(0, 4)
   const featuredEvent = events.find((event) => event.featured) || events[0] || null
+  const pics = pickPics(siteSettings)
 
   const show = (k) => (sections === null ? true : sections[k] !== false)
 
@@ -58,12 +61,12 @@ export default function Home() {
     <>
       <Hero slides={slides} slide={slide} setSlide={setSlide} />
       {show('about') && <Marquee />}
-      {show('about') && <About />}
+      {show('about') && <About pic={pics.img_home_about} />}
       {show('features') && <Features />}
       {show('coffee') && <SignatureCoffee menu={menu} />}
-      {show('chef') && <ChefSpecials chefSpecials={chefSpecials} />}
+      {show('chef') && <ChefSpecials chefSpecials={chefSpecials} chefPic={pics.img_home_chef} />}
       {show('popular') && <PopularDishes popular={popular} />}
-      {show('today') && <TodaySpecials />}
+      {show('today') && <TodaySpecials pics={pics} />}
       {show('music') && <UpcomingMusic events={events} featuredEvent={featuredEvent} />}
       {show('gallery') && <GalleryPreview gallery={gallery} />}
       {show('team') && <Team items={team} />}
@@ -71,7 +74,7 @@ export default function Home() {
       {show('reviews') && <Reviews items={reviews} />}
       {show('awards') && <Awards />}
       {show('newsletter') && <Newsletter />}
-      {show('cta') && <CtaBanner />}
+      {show('cta') && <CtaBanner pic={pics.img_home_cta} />}
     </>
   )
 }
@@ -163,7 +166,7 @@ function Marquee() {
 }
 
 /* ---------- About ---------- */
-function About() {
+function About({ pic }) {
   const points = [
     'Premium coffee', 'Signature food', 'Elegant interior', 'Live music',
     'Relaxed atmosphere', 'Excellent hospitality'
@@ -172,7 +175,7 @@ function About() {
     <section className="section">
       <div className="container split">
         <Reveal className="split-media">
-          <img src="/images/interior-1.svg" alt="The Ember & Ivy lounge" />
+          <img src={pic} alt="The Ember & Ivy lounge" />
           <span className="frame-border" />
           <span className="float-chip">“Coffee by Day, Cocktails by Night”</span>
         </Reveal>
@@ -269,7 +272,7 @@ function SignatureCoffee({ menu }) {
 }
 
 /* ---------- Chef's Specials ---------- */
-function ChefSpecials({ chefSpecials }) {
+function ChefSpecials({ chefSpecials, chefPic }) {
   const list = chefSpecials.length ? chefSpecials : [
     { id: 's1', name: 'Ember Signature Steak', tag: 'House Classic', desc: 'Grass-fed strip, rosemary butter, roasted garlic.', price: 1650, image: '/images/food-1.svg' },
     { id: 's2', name: 'Himalayan Truffle Risotto', tag: 'Veg Delight', desc: 'Wild mushrooms, aged parmesan, white truffle oil.', price: 1150, image: '/images/food-2.svg' },
@@ -302,7 +305,7 @@ function ChefSpecials({ chefSpecials }) {
           </div>
           <Reveal delay={0.2}>
             <div className="special-feature">
-              <img src="/images/chef-1.svg" alt="Chef at work" />
+              <img src={chefPic} alt="Chef at work" />
               <div className="sf-body">
                 <span className="s-tag" style={{ color: 'var(--gold-soft)' }}>From Our Kitchen</span>
                 <h5>Plated Like It Belongs in a Hotel in the Hills</h5>
@@ -349,7 +352,7 @@ function PopularDishes({ popular }) {
 }
 
 /* ---------- Today's Specials ---------- */
-function TodaySpecials() {
+function TodaySpecials({ pics }) {
   return (
     <section className="section section--alt">
       <div className="container">
@@ -363,7 +366,7 @@ function TodaySpecials() {
             <Reveal key={s.id} delay={i * 0.08}>
               <div className="menu-card">
                 <div className="m-media">
-                  <img src={s.image} alt={s.title} loading="lazy" />
+                  <img src={pics[`img_home_today_${i + 1}`] || s.image} alt={s.title} loading="lazy" />
                   <div className="m-card-badges"><span className="badge badge--seasonal">{s.tag}</span></div>
                 </div>
                 <div className="m-card-body">
@@ -610,13 +613,13 @@ function Awards() {
 }
 
 /* ---------- CTA ---------- */
-function CtaBanner() {
+function CtaBanner({ pic }) {
   return (
     <section className="section">
       <div className="container">
         <Reveal>
           <div className="cta-banner">
-            <div className="cb-img"><img src="/images/cta-1.svg" alt="" /></div>
+            <div className="cb-img"><img src={pic} alt="" /></div>
             <span className="hero-eyebrow">Tables go fast on weekends</span>
             <h3>Your Evening in Lakeside Starts Here</h3>
             <p>Reserve your table for dinner, a rooftop cocktail or a night of live music.</p>
